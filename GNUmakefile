@@ -2,16 +2,14 @@
 
 PREMAKE_OUT	:= build/premake5
 
-.PHONY: all debug release vendor clean
+.PHONY: all debug release vendor clean xcode
 
 ifeq ($(shell uname -s),Darwin)
 OS := macosx
 ARCH := Universal
-PREMAKE_TARGET := xcode4
 else
 OS := linux
 ARCH := x64
-PREMAKE_TARGET := gmake2
 endif
 
 #* Build everything rules
@@ -22,14 +20,17 @@ all:
 
 #* Build debug mode
 debug: vendor
+	@cd build/projects && $(MAKE) config=$@
 	@echo Completed Build: $@
 
 #* Build release mode
 release: vendor
+	@cd build/projects && $(MAKE) config=$@
 	@echo Completed Build: $@
 
 #* Build vendor dependencies
 vendor: $(PREMAKE_OUT)
+	$(PREMAKE_OUT) gmake2
 	@echo Completed Build: $@
 
 #* Clean project files
@@ -45,8 +46,8 @@ rebuild: clean
 #* Run tests
 run:
 	$(MAKE) all
-	@build/bin/debug/hCL
-	@build/bin/release/hCL
+	@build/bin/debug/test-hCL
+	@build/bin/release/test-hCL
 	@echo Completed: $@
 
 #* Help
@@ -60,6 +61,7 @@ help:
 	@echo make clean - cleans project files
 	@echo make rebuild - rebuilds project files
 	@echo make run - runs all tests
+	@echo make xcode - creates xcode project and builds via xcodebuild [macOS only]
 
 $(PREMAKE_OUT):
 	@$(MAKE) uuid
@@ -79,3 +81,12 @@ uuid: clang++
 	@echo Checking: $@
 	@echo "int main(){}" | clang++ -include uuid/uuid.h -x c - -fsyntax-only || \
 	(echo "Error: $@ (uuid/uuid.h) not detected. Please install $@." && exit 1)
+
+#* Exotic build methods
+ifeq ($(shell uname -s),Darwin)
+xcode:
+	xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
+	-scheme test-hCL build -configuration debug
+	xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
+	-scheme test-hCL build -configuration release
+endif
