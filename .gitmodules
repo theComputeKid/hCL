@@ -4,3 +4,6 @@
 [submodule "vendor/premake-core"]
 	path = vendor/premake-core
 	url = https://github.com/premake/premake-core.git
+[submodule "vendor/premake-export-compile-commands"]
+	path = vendor/premake-export-compile-commands
+	url = git@github.com:Jarod42/premake-export-compile-commands.git
