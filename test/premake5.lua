@@ -12,7 +12,10 @@ project "hCL-test"
 
   includedirs {
     incDir,
-    testDir .. "/include"
+    testDir .. "/include",
+    --* These two added for compile_commands.json, otherwise externalincludedirs silences their warnings.
+    rootDir .. "/vendor/googletest/googletest/include",
+    rootDir .. "/vendor/googletest/googletest"
   }
 
   files {
