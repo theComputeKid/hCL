@@ -2,7 +2,7 @@
 
 PREMAKE_OUT	:= build/premake5
 
-.PHONY: all debug release vendor clean xcode
+.PHONY: all debug release vendor clean xcode compileCommands
 
 ifeq ($(shell uname -s),Darwin)
 OS := macosx
@@ -21,6 +21,7 @@ all:
 #* Build debug mode
 debug: vendor
 	@cd build/projects && $(MAKE) config=$@
+	$(MAKE) compileCommands
 	@echo Completed Build: $@
 
 #* Build release mode
@@ -62,6 +63,7 @@ help:
 	@echo make rebuild - rebuilds project files
 	@echo make run - runs all tests
 	@echo make xcode - creates xcode project and builds via xcodebuild [macOS only]
+	@echo make compileCommands - creates compile_commands.json
 
 $(PREMAKE_OUT):
 	@$(MAKE) uuid
@@ -90,3 +92,6 @@ xcode:
 	xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
 	-scheme test-hCL build -configuration release
 endif
+
+compileCommands: $(PREMAKE_OUT)
+	$(PREMAKE_OUT) export-compile-commands

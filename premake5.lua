@@ -1,3 +1,6 @@
+--* Module to export JSON Compile-Commands
+require("vendor/premake-export-compile-commands/export-compile-commands")
+
 --* important folder paths
 rootDir = path.getabsolute(".")
 outDir = rootDir .. "/build/"
