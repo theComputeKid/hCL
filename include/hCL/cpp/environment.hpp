@@ -7,19 +7,17 @@
  * @date 2022-09-05
  */
 #pragma once
-#include <cstddef>
 #include <memory>
 #include <vector>
 
 #include <hCL/c/environment.h>
+#include <hCL/cpp/device.hpp>
 
 namespace hCL
 {
   struct Environment
   {
-    /** @brief Destroy environment. */
-    ~Environment();
-
+    /** @brief Private members come first so ptr gets initialised first. */
   private:
     /** @brief Underlying implementation pointer. */
     hCLEnvironmentPtr ptr;
@@ -29,6 +27,13 @@ namespace hCL
 
     /** @brief Only friends can access private parts. */
     friend std::unique_ptr<Environment> initEnvironment();
+
+  public:
+    /** @brief Destroy environment. */
+    ~Environment();
+
+    /** @brief Contains device information. */
+    std::vector<Device> devices;
   };
 
   /** @brief Initialise C++ environment. Cleans up on destruction. */
