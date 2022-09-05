@@ -1,5 +1,5 @@
 --* test project
-project "hCL-test"
+project "test"
 
   kind "ConsoleApp"
 
@@ -25,9 +25,10 @@ project "hCL-test"
       rootDir .. "/vendor/googletest/googletest/src/gtest-all.cc"
   }
 
-  --* precompiled header
-  pchsource(testDir .. "/pch.cpp")
-  pchheader("pch.hpp")
+  --* precompiled header for everything not xcode (xcode doesn't find pch)
+  filter "action:not xcode*"
+    pchsource(testDir .. "/pch.cpp")
+    pchheader("pch.hpp")
 
   vpaths {
     ["Import/*"] = incDir .. "/**",

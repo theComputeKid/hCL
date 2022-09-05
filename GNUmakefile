@@ -47,8 +47,8 @@ rebuild: clean
 #* Run tests
 run:
 	$(MAKE) all
-	@build/bin/debug/test-hCL
-	@build/bin/release/test-hCL
+	@build/bin/debug/test
+	@build/bin/release/test
 	@echo Completed: $@
 
 #* Help
@@ -86,11 +86,12 @@ uuid: clang++
 
 #* Exotic build methods
 ifeq ($(shell uname -s),Darwin)
-xcode:
-	xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
-	-scheme test-hCL build -configuration debug
-	xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
-	-scheme test-hCL build -configuration release
+xcode: $(PREMAKE_OUT)
+	$(PREMAKE_OUT) xcode4
+	@cd build/projects && xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
+	-scheme test build -configuration debug
+	@cd build/projects && xcodebuild -alltargets -parallelizeTargets -verbose -showBuildTimingSummary \
+	-scheme test build -configuration release
 endif
 
 compileCommands: $(PREMAKE_OUT)
