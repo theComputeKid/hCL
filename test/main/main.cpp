@@ -18,7 +18,7 @@ namespace
 #endif
 } // namespace
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   std::cout << init << std::endl;
   ::testing::InitGoogleTest(&argc, argv);
