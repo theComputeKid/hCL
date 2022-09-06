@@ -7,4 +7,5 @@
  * @date 2022-09-05
  */
 #pragma once
+#include <hCL/c/device.h>
 #include <hCL/c/environment.h>

@@ -62,3 +62,6 @@ workspace "hCL"
 
 --* Add test project
 dofile("test/premake5.lua")
+
+--* Add loader project
+dofile("src/loader/premake5.lua")

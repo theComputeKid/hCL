@@ -11,22 +11,23 @@
 #include <vector>
 
 #include <hCL/c/environment.h>
+#include <hCL/cpp/backend.hpp>
 #include <hCL/cpp/device.hpp>
+#include <hCL/loader/environment.hpp>
 
 namespace hCL
 {
   struct Environment
   {
-    /** @brief Private members come first so ptr gets initialised first. */
+    /** @brief Private members come first so native library gets initialised first. */
   private:
-    /** @brief Underlying implementation pointer. */
-    hCLEnvironmentPtr ptr;
+    loader::Environment ld;
 
     /** @brief Initialise environment. */
     Environment();
 
     /** @brief Only friends can access private parts. */
-    friend std::unique_ptr<Environment> initEnvironment();
+    friend std::unique_ptr<Environment> initEnvironment(hCL::Backend const backend);
 
   public:
     /** @brief Destroy environment. */
@@ -34,10 +35,12 @@ namespace hCL
 
     /** @brief Contains device information. */
     std::vector<Device> devices;
+
+    hCL::Backend const backend;
   };
 
   /** @brief Initialise C++ environment. Cleans up on destruction. */
-  std::unique_ptr<Environment> initEnvironment();
+  std::unique_ptr<Environment> initEnvironment(hCL::Backend const backend);
 } // namespace hCL
 
 #include <hCL/wrapper/environment.hpp>

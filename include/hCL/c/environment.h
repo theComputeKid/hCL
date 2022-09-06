@@ -13,6 +13,12 @@
 
 typedef struct hCLEnvironment* hCLEnvironmentPtr;
 
+/** @brief Get the name of the environment. NULL terminated. */
+hCL_LINKAGE char* hCL_environment_get_name();
+
+/** @brief Destroy the name of the environment. Sets to NULL for safety. */
+hCL_LINKAGE void hCL_environment_destroy_name(char** name);
+
 /** @brief Initialise environment. */
 hCL_LINKAGE hCLEnvironmentPtr hCL_environment_create();
 
